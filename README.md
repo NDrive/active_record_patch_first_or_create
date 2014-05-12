@@ -26,15 +26,19 @@ We find out that methods like first_or_create or find_or_create_by are not atomi
 
 Finds the first record with the given attributes, or creates a record with the attributes if one is not found:
 
+```ruby 
 # Find the first user with uid "abc123" or create a new one.
 User.where(uid: 'abc123').atomic_first_or_create(name: 'John', uid: 'abc123')
 # => #<User id: 1, uid: "abc123", name: 'John'>
-
+```
+```ruby 
 # Find the first user with uid "abc123" or create a new one.
 # We already have one so the existing record will be returned.
 User.where(uid: 'abc123').atomic_first_or_create(name: 'John', uid: 'abc123')
 # => #<User id: 1, uid: "abc123", name: 'John'>
-
+```
+```ruby 
 # Find the first user with uid "abc1234" or create a new one
 User.where(uid: 'abc123').atomic_first_or_create(name: 'Johansson', uid: 'abc1234')
 # => #<User id: 2, uid: "abc1234", name: 'Johansson'>
+```
