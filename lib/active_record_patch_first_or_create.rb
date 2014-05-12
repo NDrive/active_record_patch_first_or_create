@@ -31,7 +31,7 @@ end
 
 module ActiveRecord
   class Relation
-    def atomic_first_or_create(attributes = nil, &block)
+    def atomic_first_or_create(attributes = nil)
       ActiveRecordPatchFirstOrCreate.first_or_create(self, attributes)
     end
   end
