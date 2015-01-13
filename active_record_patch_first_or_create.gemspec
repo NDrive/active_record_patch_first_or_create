@@ -20,9 +20,9 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake", "~> 0"
-  spec.add_development_dependency "minitest"
-  spec.add_development_dependency "mocha"
-  spec.add_development_dependency "webmock"
-  spec.add_development_dependency "activerecord"
-  spec.add_development_dependency "sqlite3"
+  spec.add_development_dependency "minitest", "~> 0"
+  spec.add_development_dependency "mocha", "~> 0"
+  spec.add_development_dependency "webmock", "~> 0"
+  spec.add_development_dependency "activerecord", "~> 0"
+  spec.add_development_dependency "sqlite3", "~> 0"
 end
