@@ -1,16 +1,14 @@
 require "active_record_patch_first_or_create/version"
+require "active_record_patch_first_or_create/arel_query_creator"
 
 module ActiveRecordPatchFirstOrCreate
   def self.first_or_create relation, attributes
+
     attributes = attributes.merge(relation.where_values_hash)
     attributes = attributes.merge(rails_timestamps(relation))
     attributes = serialize_columns(relation, attributes)
 
-    sql = "INSERT INTO #{relation.table_name} (#{attributes.keys.join(",")})
-           SELECT #{(['?'] * attributes.values.count).join(', ')}
-           WHERE NOT EXISTS (#{relation.select('1').to_sql})"
-
-    relation.klass.find_by_sql([sql] + attributes.values)
+    ActiveRecord::Base.connection.execute(ArelQueryCreator.new(relation, attributes).to_sql)
 
     relation.first
   end
@@ -22,9 +20,8 @@ module ActiveRecordPatchFirstOrCreate
 
   def self.serialize_columns relation, attributes
     Hash[attributes.map do |key, value|
-      serializer = relation.klass.serialized_attributes[key.to_s]
-      value = serializer.dump(value) unless serializer.nil?
-      [key, value]
+      column = relation.klass.columns.find { |c| c.name == key.to_s }
+      [key, column ? column.cast_type.type_cast_for_database(value) : value]
     end]
   end
 end
